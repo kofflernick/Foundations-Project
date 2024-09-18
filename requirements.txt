@@ -1,0 +1,10 @@
+individual items:
+submitting a ticket - dao and functions created
+loggin register - not started
+ticket status: approve | denied - done
+pending tickets can be added to a queue and removed upon status change - working almost there
+view previous tickets by employee that created them - not started
+
+big picture: 
+server - not started
+control flow of server for employee vs manager - not started 

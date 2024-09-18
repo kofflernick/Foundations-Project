@@ -14,8 +14,8 @@ let deniedTicketList = []
 
 async function loadTicketList() {
   try {
-    ticketList.push(await readTickets())
-    console.log(ticketList)
+    const tickets = await readTickets()
+    ticketList.push(...tickets)
   } catch (error) {
     console.log("failed to load ticket list at functions.js level", error)
   }
@@ -24,11 +24,10 @@ async function loadTicketList() {
 async function loadPendingTicketList() {
   try {
     const pendingTickets = await queryTicketsByStatus("Pending")
-    console.log("Pending Tickets: ", pendingTickets)
-    pendingTicketList.push(pendingTickets)
+    pendingTicketList.push(...pendingTickets)
   } catch (err) {
     console.log(
-      "Error querying tickets by status at the function.js level",
+      "Error querying pending tickets by status at the function.js level",
       err
     )
   }
@@ -37,11 +36,10 @@ async function loadPendingTicketList() {
 async function loadApprovedTicketList() {
   try {
     const approvedTickets = await queryTicketsByStatus("Approved")
-    console.log("Approved Tickets: ", approvedTickets)
-    approvedTicketList.push(approvedTickets)
+    approvedTicketList.push(...approvedTickets)
   } catch (err) {
     console.log(
-      "Error querying tickets by status at the function.js level",
+      "Error querying approved tickets by status at the function.js level",
       err
     )
   }
@@ -50,12 +48,10 @@ async function loadApprovedTicketList() {
 async function loadDeniedTicketList() {
   try {
     const deniedTickets = await queryTicketsByStatus("Denied")
-    console.log("Denied Tickets: ", deniedTickets)
-    //problem here does not seem to be pushing to the empty array
-    deniedTicketList.push(deniedTickets)
+    deniedTicketList.push(...deniedTickets)
   } catch (err) {
     console.log(
-      "Error querying tickets by status at the function.js level",
+      "Error querying denied tickets by status at the function.js level",
       err
     )
   }

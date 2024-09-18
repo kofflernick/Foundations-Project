@@ -57,7 +57,7 @@ async function updateTicketStatus(ticketID, newStatus) {
     Key: { TicketID: ticketID },
     UpdateExpression: "set #status = :status",
     ExpressionAttributeNames: {
-      "#status": "status", // Using ExpressionAttributeNames to prevent conflicts with reserved words
+      "#status": "status",
     },
     ExpressionAttributeValues: {
       ":status": newStatus,
