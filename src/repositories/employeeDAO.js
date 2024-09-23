@@ -40,6 +40,29 @@ async function queryEmployeesByStatus(status) {
   }
 }
 
+async function findUsername(username) {
+  const command = new ScanCommand({
+    TableName: "employee",
+    FilterExpression: "#username = :username",
+    ExpressionAttributeNames: {
+      "#username": "username",
+    },
+    ExpressionAttributeValues: {
+      ":username": username,
+    },
+  })
+
+  try {
+    const data = await documentClient.send(command)
+    if (data.Items && data.Items.length > 0) {
+      console.log("username already exists: ", username)
+      return true
+    }
+  } catch (err) {
+    console.error("error scanning for username: ", err)
+  }
+}
+
 async function createEmployee(employee) {
   const command = new PutCommand({
     TableName: "employee",
@@ -81,4 +104,5 @@ module.exports = {
   queryEmployeesByStatus,
   createEmployee,
   updateEmployeeStatus,
+  findUsername,
 }

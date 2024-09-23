@@ -3,6 +3,7 @@ const {
   queryEmployeesByStatus,
   createEmployee,
   updateEmployeeStatus,
+  findUsername,
 } = require("../repositories/employeeDAO.js")
 const { v4: uuidv4 } = require("uuid")
 
@@ -17,4 +18,13 @@ async function addEmployee(username, password) {
   return data
 }
 
-module.exports = { addEmployee }
+async function userNameExists(username) {
+  const userNameExists = await findUsername(username)
+  if (userNameExists) {
+    return true
+  } else {
+    return false
+  }
+}
+
+module.exports = { addEmployee, userNameExists }
