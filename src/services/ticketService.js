@@ -3,7 +3,7 @@ const {
   createTicket,
   updateTicketStatus,
   queryTicketsByStatus,
-} = require("./DAO.js")
+} = require("../repositories/ticketDAO.js")
 const { v4: uuidv4 } = require("uuid")
 
 //may have to make sure these are empty before calling a loading function each time
@@ -68,9 +68,14 @@ async function addTicket(amount, description) {
   return data
 }
 
+async function updateTicketByStatus(ticketId, newStatus) {
+  const data = await updateTicketStatus(ticketId, newStatus)
+  return data
+}
+
 module.exports = {
   addTicket,
-  updateTicketStatus,
+  updateTicketByStatus,
   loadTicketList,
   loadPendingTicketList,
   loadApprovedTicketList,

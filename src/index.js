@@ -1,51 +1,22 @@
-const {
-  addTicket,
-  updateTicketStatus,
-  loadTicketList,
-  loadPendingTicketList,
-  loadApprovedTicketList,
-  loadDeniedTicketList,
-  ticketList,
-  pendingTicketList,
-  approvedTicketList,
-  deniedTicketList,
-} = require("./functions.js")
+const express = require("express")
+const app = express()
+const logger = require("./util/logger")
+const ticketRouter = require("./controllers/ticketRouter.js")
+const employeeRouter = require("./controllers/employeeRouter.js")
+const ticketDaoDirect = require("./services/ticketService")
 
-//works
-//loadTicketList()
-//addTicket(4, "this is the description")
-//updateTicketStatus("cf87045a-4127-4573-b65f-c5137de56ee0", "Denied")
-//loadPendingTicketList()
-//loadApprovedTicketList()
-//loadDeniedTicketList()
+const PORT = 3000
 
-//works
-// async function run() {
-//   await loadTicketList()
-//   console.log("loaded tickets: ", ticketList)
-//   ticketList.length = 0
-// }
+app.use(express.json())
 
-//works
-// async function run() {
-//   await loadPendingTicketList()
-//   console.log("loaded tickets: ", pendingTicketList)
-//   pendingTicketList.length = 0
-// }
+app.use((req, res, next) => {
+  logger.info(`Incoming ${req.method} : ${req.url}`)
+  next()
+})
 
-// works
-// async function run() {
-//   await loadApprovedTicketList()
-//   console.log("loaded tickets: ", approvedTicketList)
-//   approvedTicketList.length = 0
-// }
+app.use("/tickets", ticketRouter)
+app.use("/employee", employeeRouter)
 
-// works
-// async function run() {
-//   await loadDeniedTicketList()
-//   console.log("loaded tickets: ", deniedTicketList)
-//   deniedTicketList.length = 0
-// }
-
-// run()
-// run()
+app.listen(PORT, () => {
+  console.log(`Server is listening on http://localhost:${PORT}`)
+})
