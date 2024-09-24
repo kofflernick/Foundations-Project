@@ -4,27 +4,32 @@ const {
   createEmployee,
   updateEmployeeStatus,
   findUsername,
+  findUserByName,
 } = require("../repositories/employeeDAO.js")
 const { v4: uuidv4 } = require("uuid")
 
 async function addEmployee(username, password) {
-  let unique_key = uuidv4()
-  let data = await createEmployee({
-    employeeID: unique_key,
-    username,
-    password,
-    status: "employee",
-  })
-  return data
-}
+  const doesUserNameExist = await findUsername(username)
 
-async function userNameExists(username) {
-  const userNameExists = await findUsername(username)
-  if (userNameExists) {
-    return true
+  if (doesUserNameExist) {
+    console.log("Username already exists, returning null")
+    return null
   } else {
-    return false
+    let unique_key = uuidv4()
+    let data = await createEmployee({
+      employeeID: unique_key,
+      username,
+      password,
+      status: "employee",
+    })
+    console.log("Created new employee:", data)
+    return data
   }
 }
 
-module.exports = { addEmployee, userNameExists }
+async function findUser(username) {
+  const user = await findUserByName(username)
+  return user
+}
+
+module.exports = { addEmployee, findUser }

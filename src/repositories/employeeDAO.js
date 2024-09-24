@@ -63,6 +63,29 @@ async function findUsername(username) {
   }
 }
 
+async function findUserByName(username) {
+  const command = new ScanCommand({
+    TableName: "employee",
+    FilterExpression: "#username = :username",
+    ExpressionAttributeNames: {
+      "#username": "username",
+    },
+    ExpressionAttributeValues: {
+      ":username": username,
+    },
+  })
+
+  try {
+    const data = await documentClient.send(command)
+    if (data.Items) {
+      console.log("here is the user: ", data.Items)
+      return data.Items
+    }
+  } catch (err) {
+    console.error("error scanning for username: ", err)
+  }
+}
+
 async function createEmployee(employee) {
   const command = new PutCommand({
     TableName: "employee",
@@ -70,17 +93,17 @@ async function createEmployee(employee) {
   })
 
   try {
-    const data = await documentClient.send(command)
-    return data
+    await documentClient.send(command)
+    return employee
   } catch (err) {
     console.log("failed to create employee at dao level", err)
   }
 }
 
-async function updateEmployeeStatus(ticketID, newStatus) {
+async function updateEmployeeStatus(employeeID, newStatus) {
   const command = new UpdateCommand({
     TableName: "employee",
-    Key: { TicketID: ticketID },
+    Key: { employeeID: employeeID },
     UpdateExpression: "set #status = :status",
     ExpressionAttributeNames: {
       "#status": "status",
@@ -105,4 +128,5 @@ module.exports = {
   createEmployee,
   updateEmployeeStatus,
   findUsername,
+  findUserByName,
 }
