@@ -42,11 +42,50 @@ employeeRouter.post("/login", async (req, res) => {
       },
       secretKey,
       {
-        expiresIn: "5m",
+        expiresIn: "1m",
       }
     )
     res.json({ token })
   }
 })
+
+employeeRouter.get("/protected", authenticationToken, (req, res) => {
+  res.json({ message: "protected route accessed", user: req.user })
+})
+
+async function authenticationToken(req, res, next) {
+  const authHeader = req.headers["authorization"]
+  const token = authHeader && authHeader.split(" ")[1]
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized access" })
+  }
+
+  const user = await decodeJWT(token)
+
+  if (!user) {
+    return res
+      .status(403)
+      .json({ message: "Forbidden: Invalid or expired token" })
+  }
+
+  req.user = user
+  next()
+}
+
+async function decodeJWT(token) {
+  try {
+    const user = await jwt.verify(token, secretKey)
+    return user
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      console.error("JWT expired:", err.message)
+      return null
+    } else {
+      console.error("JWT verification failed:", err.message)
+      return null
+    }
+  }
+}
 
 module.exports = employeeRouter
