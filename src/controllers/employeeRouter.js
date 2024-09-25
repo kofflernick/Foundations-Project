@@ -7,6 +7,7 @@ const employeeService = require("../services/employeeService")
 
 const secretKey = "your-secret-key"
 
+//route for a logged in manager to update the status of an employee from 'employee' to 'manager
 employeeRouter.put(
   "/update-status",
   authenticateAdminToken,
@@ -28,6 +29,15 @@ employeeRouter.put(
     }
   }
 )
+
+employeeRouter.get("/", async (req, res) => {
+  try {
+    const employees = await employeeService.getEmployees()
+    res.status(200).json({ employees })
+  } catch {
+    res.status(400).json({ message: "failed to get employees: " })
+  }
+})
 
 async function authenticateAdminToken(req, res, next) {
   const authHeader = req.headers["authorization"]

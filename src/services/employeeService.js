@@ -39,4 +39,9 @@ async function changeEmployeeStatus(employeeID, newStatus) {
   return updateEmployee
 }
 
-module.exports = { addEmployee, findUser, changeEmployeeStatus }
+async function getEmployees() {
+  const employees = await readEmployees()
+  return employees
+}
+
+module.exports = { addEmployee, findUser, changeEmployeeStatus, getEmployees }
