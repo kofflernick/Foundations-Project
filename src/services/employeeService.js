@@ -32,4 +32,6 @@ async function findUser(username) {
   return user
 }
 
+async function changeEmployeeStatus(employeeID, newStatus) {}
+
 module.exports = { addEmployee, findUser }
