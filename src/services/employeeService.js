@@ -32,6 +32,11 @@ async function findUser(username) {
   return user
 }
 
-async function changeEmployeeStatus(employeeID, newStatus) {}
+async function changeEmployeeStatus(employeeID, newStatus) {
+  const updateEmployee = await updateEmployeeStatus(employeeID, newStatus)
+  console.log("Updating employee status to:", newStatus) // Log to check newStatus value
 
-module.exports = { addEmployee, findUser }
+  return updateEmployee
+}
+
+module.exports = { addEmployee, findUser, changeEmployeeStatus }

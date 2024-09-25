@@ -58,7 +58,7 @@ app.post("/login", async (req, res) => {
       },
       secretKey,
       {
-        expiresIn: "2m",
+        expiresIn: "5m",
       }
     )
     res.json({ token })

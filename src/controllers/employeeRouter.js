@@ -7,11 +7,25 @@ const employeeService = require("../services/employeeService")
 
 const secretKey = "your-secret-key"
 
-employeeRouter.get(
-  "/change-employee-status",
+employeeRouter.put(
+  "/update-status",
   authenticateAdminToken,
-  (req, res) => {
-    res.json({ message: "protected route accessed", user: req.user })
+  async (req, res) => {
+    const employeeID = req.body.employeeID
+    const newStatus = req.body.status
+
+    console.log("Request body:", req.body)
+    console.log("Received newStatus:", newStatus)
+
+    try {
+      const result = await employeeService.changeEmployeeStatus(
+        employeeID,
+        newStatus
+      )
+      res.status(200).json(result)
+    } catch {
+      res.status(400).json({ message: "failed to change status: ", result })
+    }
   }
 )
 
@@ -25,7 +39,6 @@ async function authenticateAdminToken(req, res, next) {
     const user = await decodeJWT(token)
 
     if (!user || user.status !== "manager") {
-      console.log(user.satus)
       return res
         .status(403)
         .json({ message: "Forbidden: Invalid or expired token" })
