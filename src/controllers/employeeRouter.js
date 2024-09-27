@@ -9,27 +9,23 @@ const employeeService = require("../services/employeeService")
 const secretKey = "your-secret-key"
 
 //route for a logged in manager to update the status of an employee from 'employee' to 'manager
-employeeRouter.put(
-  "/update-status",
-  authenticateAdminToken,
-  async (req, res) => {
-    const employeeID = req.body.employeeID
-    const newStatus = req.body.status
+employeeRouter.put("/status", authenticateAdminToken, async (req, res) => {
+  const employeeID = req.body.employeeID
+  const newStatus = req.body.status
 
-    console.log("Request body:", req.body)
-    console.log("Received newStatus:", newStatus)
+  console.log("Request body:", req.body)
+  console.log("Received newStatus:", newStatus)
 
-    try {
-      const result = await employeeService.changeEmployeeStatus(
-        employeeID,
-        newStatus
-      )
-      res.status(200).json(result)
-    } catch {
-      res.status(400).json({ message: "failed to change status: ", result })
-    }
+  try {
+    const result = await employeeService.changeEmployeeStatus(
+      employeeID,
+      newStatus
+    )
+    res.status(200).json(result)
+  } catch {
+    res.status(400).json({ message: "failed to change status: ", result })
   }
-)
+})
 
 employeeRouter.get("/", async (req, res) => {
   try {

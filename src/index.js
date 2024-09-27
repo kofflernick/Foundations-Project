@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 })
 
 app.use("/tickets", ticketRouter)
-app.use("/employee", employeeRouter)
+app.use("/employees", employeeRouter)
 
 const secretKey = "your-secret-key"
 
@@ -43,13 +43,22 @@ app.post("/login", async (req, res) => {
   const username = req.body.username
   const password = req.body.password
 
-  const login = await employeeService.findUser(username)
-  if (!login || password !== login[0].password) {
-    console.log("here is the login password: ", login[0].password)
-    console.log("here is the req password: ", password)
-    res.status(401).json({ message: "invalid creds" })
-  } else {
-    console.log("Login user data:", login[0])
+  try {
+    // Fetch the user data by username
+    const login = await employeeService.findUser(username)
+
+    // Handle case where user is not found or login array is empty
+    if (!login || login.length === 0) {
+      return res.status(401).json({ message: "User not found" })
+    }
+
+    // Check if the password matches
+    if (password !== login[0].password) {
+      console.log("Entered password does not match stored password")
+      return res.status(401).json({ message: "Invalid credentials" })
+    }
+
+    // Create the JWT if login is successful
     const token = jwt.sign(
       {
         id: login[0].employeeID,
@@ -58,10 +67,16 @@ app.post("/login", async (req, res) => {
       },
       secretKey,
       {
-        expiresIn: "5m",
+        expiresIn: "15m", // Token expires in 5 minutes
       }
     )
+
+    console.log("Employee ID being added to JWT:", login[0].employeeID)
+    // Return the token in the response
     res.json({ token })
+  } catch (error) {
+    console.error("Login error:", error)
+    res.status(500).json({ message: "Login failed", error })
   }
 })
 

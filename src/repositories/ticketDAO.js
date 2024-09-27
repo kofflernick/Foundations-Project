@@ -41,10 +41,32 @@ async function queryTicketsByStatus(status) {
   }
 }
 
+async function queryTicketsByEmployee(employeeID) {
+  const command = new QueryCommand({
+    TableName: "tickets",
+    IndexName: "createdByIndex", // Optional, use an index if you have one
+    KeyConditionExpression: "#createdBy = :createdBy",
+    ExpressionAttributeNames: {
+      "#createdBy": "createdBy",
+    },
+    ExpressionAttributeValues: {
+      ":createdBy": employeeID,
+    },
+  })
+  try {
+    const data = await documentClient.send(command)
+    return data.Items
+  } catch (err) {
+    console.log("Error querying tickets by employee at the DAO level", err)
+  }
+}
+
 async function createTicket(Item) {
   const command = new PutCommand({ TableName: "tickets", Item })
   try {
     const data = await documentClient.send(command)
+    console.log("Inserting ticket into DynamoDB:", Item)
+
     return data
   } catch (err) {
     console.log("failed to create item at dao level", err)
@@ -54,7 +76,7 @@ async function createTicket(Item) {
 async function updateTicketStatus(ticketID, newStatus) {
   const command = new UpdateCommand({
     TableName: "tickets",
-    Key: { TicketID: ticketID },
+    Key: { TicketID: ticketID }, // Ensure this matches your partition key
     UpdateExpression: "set #status = :status",
     ExpressionAttributeNames: {
       "#status": "status",
@@ -64,9 +86,9 @@ async function updateTicketStatus(ticketID, newStatus) {
     },
     ReturnValues: "UPDATED_NEW",
   })
+
   try {
     const data = await documentClient.send(command)
-    console.log("Ticket status updated successfully:", data)
     return data
   } catch (err) {
     console.log("Failed to update ticket status", err)
@@ -78,4 +100,5 @@ module.exports = {
   createTicket,
   updateTicketStatus,
   queryTicketsByStatus,
+  queryTicketsByEmployee,
 }

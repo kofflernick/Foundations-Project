@@ -3,6 +3,7 @@ const {
   createTicket,
   updateTicketStatus,
   queryTicketsByStatus,
+  queryTicketsByEmployee,
 } = require("../repositories/ticketDAO.js")
 const { v4: uuidv4 } = require("uuid")
 
@@ -57,20 +58,38 @@ async function loadDeniedTicketList() {
   }
 }
 
-async function addTicket(amount, description) {
+async function addTicket(amount, description, employeeID) {
   let unique_key = uuidv4()
   let data = await createTicket({
     TicketID: unique_key,
     amount,
     description,
     status: "Pending",
+    createdBy: employeeID,
   })
+  console.log("Creating ticket with data:", {
+    TicketID: unique_key,
+    amount,
+    description,
+    status: "Pending",
+    createdBy: employeeID,
+  })
+
   return data
 }
 
 async function updateTicketByStatus(ticketId, newStatus) {
   const data = await updateTicketStatus(ticketId, newStatus)
   return data
+}
+
+async function loadTicketsByEmployee(employeeID) {
+  try {
+    const tickets = await queryTicketsByEmployee(employeeID)
+    return tickets
+  } catch (err) {
+    console.log("Failed to load tickets for employee", err)
+  }
 }
 
 module.exports = {
@@ -80,6 +99,7 @@ module.exports = {
   loadPendingTicketList,
   loadApprovedTicketList,
   loadDeniedTicketList,
+  loadTicketsByEmployee,
   ticketList,
   pendingTicketList,
   approvedTicketList,
