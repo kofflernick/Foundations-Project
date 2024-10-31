@@ -29,12 +29,12 @@ app.post("/register", async (req, res) => {
     const newUser = await employeeService.addEmployee(username, password)
 
     if (!newUser) {
-      res.status(400).json({ message: "Username already taken" })
+      res.status(400).json({ message: "username already taken" })
     } else {
-      res.status(201).json({ message: "User successfully registered", newUser })
+      res.status(201).json({ message: "user successfully registered", newUser })
     }
   } catch (error) {
-    res.status(500).json({ message: "User registration unsuccessful", error })
+    res.status(500).json({ message: "user registration unsuccessful", error })
   }
 })
 
@@ -44,21 +44,14 @@ app.post("/login", async (req, res) => {
   const password = req.body.password
 
   try {
-    // Fetch the user data by username
     const login = await employeeService.findUser(username)
-
-    // Handle case where user is not found or login array is empty
     if (!login || login.length === 0) {
       return res.status(401).json({ message: "User not found" })
     }
-
-    // Check if the password matches
     if (password !== login[0].password) {
-      console.log("Entered password does not match stored password")
-      return res.status(401).json({ message: "Invalid credentials" })
+      console.log("entered password does not match stored password")
+      return res.status(401).json({ message: "invalid credentials" })
     }
-
-    // Create the JWT if login is successful
     const token = jwt.sign(
       {
         id: login[0].employeeID,
@@ -67,16 +60,15 @@ app.post("/login", async (req, res) => {
       },
       secretKey,
       {
-        expiresIn: "15m", // Token expires in 5 minutes
+        expiresIn: "15m", 
       }
     )
 
-    console.log("Employee ID being added to JWT:", login[0].employeeID)
-    // Return the token in the response
+    console.log("employee ID being added to JWT:", login[0].employeeID)
     res.json({ token })
   } catch (error) {
     console.error("Login error:", error)
-    res.status(500).json({ message: "Login failed", error })
+    res.status(500).json({ message: "login failed", error })
   }
 })
 

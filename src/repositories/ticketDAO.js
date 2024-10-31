@@ -44,7 +44,7 @@ async function queryTicketsByStatus(status) {
 async function queryTicketsByEmployee(employeeID) {
   const command = new QueryCommand({
     TableName: "tickets",
-    IndexName: "createdByIndex", // Optional, use an index if you have one
+    IndexName: "createdByIndex",
     KeyConditionExpression: "#createdBy = :createdBy",
     ExpressionAttributeNames: {
       "#createdBy": "createdBy",
@@ -76,7 +76,7 @@ async function createTicket(Item) {
 async function updateTicketStatus(ticketID, newStatus) {
   const command = new UpdateCommand({
     TableName: "tickets",
-    Key: { TicketID: ticketID }, // Ensure this matches your partition key
+    Key: { TicketID: ticketID },
     UpdateExpression: "set #status = :status",
     ExpressionAttributeNames: {
       "#status": "status",
