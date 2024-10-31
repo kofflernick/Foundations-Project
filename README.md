@@ -1,7 +1,3 @@
-Here’s a sample `README.md` for your project, covering installation, usage, and an overview of the key functionality and structure. You can expand or customize it based on specific project requirements.
-
----
-
 # Employee Expense Reimbursement System
 
 This project is an Employee Expense Reimbursement System, built to help organizations track and manage employee expense claims. It allows employees to submit expense tickets, which can then be reviewed and updated to reflect their status (Pending, Approved, Denied) by authorized personnel. The backend is implemented with Node.js, Express, and DynamoDB.
