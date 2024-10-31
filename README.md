@@ -11,7 +11,6 @@ This project is an Employee Expense Reimbursement System, built to help organiza
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Environment Variables](#environment-variables)
 - [Usage](#usage)
 - [Testing](#testing)
 
