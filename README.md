@@ -1,6 +1,6 @@
 # Employee Expense Reimbursement System
 
-This project is an Employee Expense Reimbursement System, built to help organizations track and manage employee expense claims. It allows employees to submit expense tickets, which can then be reviewed and updated to reflect their status (Pending, Approved, Denied) by authorized personnel. The backend is implemented with Node.js, Express, and DynamoDB.
+This project is an Employee Expense Reimbursement System, built to help organizations track and manage employee expense claims. It allows employees to submit expense tickets, which can then be reviewed and updated to reflect their status (Pending, Approved, Denied) by authorized personnel. Implemented with Node.js, Express, and DynamoDB.
 
 ## Table of Contents
 
