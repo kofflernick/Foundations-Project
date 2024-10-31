@@ -40,8 +40,7 @@ README.md                     # Project documentation
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/expense-reimbursement-system.git
-   cd expense-reimbursement-system
+   gh repo clone kofflernick/Foundations-Project
    ```
 
 2. Install dependencies:
